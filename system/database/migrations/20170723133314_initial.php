@@ -63,6 +63,7 @@ class Initial extends Migrator
             ->addColumn("perkType", "integer")
             ->addColumn("oneTime", "boolean")
             ->addColumn("value", "string")
+            ->addColumn("description", "string", ["limit" => \Phinx\Db\Adapter\MysqlAdapter::TEXT_LONG])
             ->save();
 
         // which servers should a perk apply to?
@@ -75,8 +76,11 @@ class Initial extends Migrator
 
         // shop items
         $this->table("shop_items")
+            ->addColumn("name", "string")
+            ->addColumn("image", "string")
             ->addColumn("perkId", "integer", ["null" => false])->addForeignKey("perkId", "perks", "id", ["delete" => "CASCADE"])
             ->addColumn("categoryId", "integer")->addForeignKey("categoryId", "shop_categories", "id", ["delete" => "CASCADE"])
+            ->addColumn("description", "string", ["limit" => \Phinx\Db\Adapter\MysqlAdapter::TEXT_LONG])
             ->addColumn("price", "float")
             /*
              * Of perk_time

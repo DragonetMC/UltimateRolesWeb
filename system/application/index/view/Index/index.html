@@ -1,18 +1,63 @@
 {{extend name="common@common/template" /}}
 {{block name="title"}}Home{{/block}}
 {{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="imports"}}
+<style>
+.box {
+  border: 4px solid #bbb;
+}
+</style>
+{{/block}}
 {{block name="body"}}
 <h1>Perks Management System</h1>
 <hr />
-<div class="col-lg-6 col-md-12" style="border: 1px solid #eee; ">
-  <h3>Featured Items</h3>
-  
-</div>
-<div class="col-lg-6 col-md-12" style="border: 1px solid #eee; ">
-  <h3>Statistics</h3>
-  <p>
-  Total players: {{$users}}<br />
-  Total perks purchased: {{$purchases}}<br />
-  </p>
+<div class="row">
+  <div class="col-lg-6 col-md-12 box">
+    <h3>Featured Items</h3>
+    <div class="container-fluid">
+    {{volist name="featured_items" id="item"}}
+    <div class="col-lg-6 col-md-3" style="border: 2px solid #eee; margin-bottom: 16px; ">
+      <div class="container-fluid">
+        <div class="col-lg-12" style="text-align: center; ">
+          <img src="{{$item.image}}" style="width: 64px; height: 64px; " />
+        </div>
+        <div class="col-lg-12" style="text-align: center; ">
+          <h4>[#{{$i}}] <strong>{{$item.name}}</strong></h4>
+        </div>
+        <div class="col-lg-12">
+          <div class="col-lg-6" style="text-align: left; ">
+            Contents: <br />
+            {{$item.perk.name}} <a href="{{$Request.root}}/perk/view/id/{{$item.perk.id}}">(Details)</a>
+          </div>
+          <div class="col-lg-6" style="text-align: right; color: #ff5555; font-weight: bold; ">
+            Price: <br />{{$item.price}}
+          </div>
+        </div>
+        <div class="col-lg-12" style="margin-bottom: 8px; ">
+          <a class="btn btn-danger" style="width: 100%; " href="{{$Request.root}}/shop/purchase/id/{{$item.id}}" >Purchase Now! </a>
+        </div>
+      </div>
+    </div>
+    {{/volist}}
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-12" style="border: 4px solid #bbb; ">
+    <h3>Statistics</h3>
+    <p>
+    Total players: {{$users}}<br />
+    Total perks purchased: {{$purchases}}<br />
+    </p>
+  </div>
+  <div class="col-lg-12 box">
+    <h3>My Information</h3>
+    <div class="container-fluid" style="padding-bottom: 8px; ">
+      {{empty name="Think.session.user_id"}}
+        Not logged in, <a onclick="$('.login-form').toggle(); ">Login now</a>! 
+        {{include file="common/login" /}}
+      {{else /}}
+        <!-- TODO -->
+      {{/empty}}
+    </div>
+  </div>
 </div>
 {{/block}}

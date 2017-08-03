@@ -1,0 +1,21 @@
+<div class="login-form container-fluid" style="display: none; border: 2px solid #eee; ">
+  <h2>Login</h2>
+  <form action="{{$Request.root}}/user/auth" method="POST">
+    <div class="form-group">
+      <label for="login_username">Email address</label>
+      <input class="form-control" id="login_username" name="username" placeholder="Username">
+    </div>
+    <div class="form-group">
+      <label for="login_password">Password</label>
+      <input type="password" class="form-control" id="login_password" name="password" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-default">Login</button><br />
+    <a href="#" onclick="$('#info_register').toggle(); ">Create account</a>
+    <div id="info_register" style="display: none; margin-bottom: 4px; " class="ui-widget-content ui-corner-all">
+      <h3 class="ui-widget-header ui-corner-all">How to create an account? </h3>
+      <p>
+      You have to join the server and type <code>/shop</code> to get your link. <br />
+      </p>
+    </div>
+  </form>
+</div>
