@@ -17,7 +17,7 @@ return [
     // 应用命名空间
     'app_namespace'          => 'app',
     // 应用调试模式
-    'app_debug'              => false,
+    'app_debug'              => true,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -131,13 +131,13 @@ return [
         // 模板文件名分隔符
         'view_depr'    => DS,
         // 模板引擎普通标签开始标记
-        'tpl_begin'    => '{',
+        'tpl_begin'    => '{{',
         // 模板引擎普通标签结束标记
-        'tpl_end'      => '}',
+        'tpl_end'      => '}}',
         // 标签库标签开始标记
-        'taglib_begin' => '{',
+        'taglib_begin' => '{{',
         // 标签库标签结束标记
-        'taglib_end'   => '}',
+        'taglib_end'   => '}}',
     ],
 
     // 视图输出字符串内容替换

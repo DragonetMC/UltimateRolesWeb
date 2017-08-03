@@ -1,0 +1,19 @@
+<li class="sidebar-brand">
+  <a href="{{$Request.root}}">
+    <h1>Welcome</h1>
+  </a>
+</li>
+<hr />
+<li><a href="{{$Request.root}}">Home</a></li>
+<hr />
+<li>
+  <a href="{{$Request.root}}/shop">Shop</a>
+  <ul id="categories">
+{{volist id="c" name="item_categories"}}
+<li><a href="{{$Request.root}}/shop/index/id/{{$c.id}}">{{$c.name}}</a></li>
+{{/volist}}
+  </ul>
+</li>
+<script type="javascript">
+  $(function(){$("#menu").menu();});
+</script>

@@ -1,0 +1,18 @@
+{{extend name="common@common/template" /}}
+{{block name="title"}}Home{{/block}}
+{{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="body"}}
+<h1>Perks Management System</h1>
+<hr />
+<div class="col-lg-6 col-md-12" style="border: 1px solid #eee; ">
+  <h3>Featured Items</h3>
+  
+</div>
+<div class="col-lg-6 col-md-12" style="border: 1px solid #eee; ">
+  <h3>Statistics</h3>
+  <p>
+  Total players: {{$users}}<br />
+  Total perks purchased: {{$purchases}}<br />
+  </p>
+</div>
+{{/block}}
