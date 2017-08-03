@@ -3,9 +3,19 @@
     <h1>Welcome</h1>
   </a>
 </li>
+<div style="color: #fff; padding-left: 16px; ">
+{{empty name="Think.session.user_id"}}
+Not logged in, <a href="{{$Request.root}}/my/login">login now</a>! 
+{{else /}}
+{{/empty}}
+</div>
 <hr />
 <li><a href="{{$Request.root}}">Home</a></li>
-<li><a href="{{$Request.root}}">My</a></li>
+{{empty name="Think.session.user_id"}}
+<li><a href="{{$Request.root}}/my/login">My</a></li>
+{{else /}}
+<li><a href="{{$Request.root}}/my">My Space</a></li>
+{{/empty}}
 <hr />
 <li>
   <a href="{{$Request.root}}/shop">Shop</a>
