@@ -1,8 +1,8 @@
-<div class="login-form container-fluid" style="display: none; border: 2px solid #eee; ">
+<div class="login-form container-fluid" style="border: 2px solid #eee; ">
   <h2>Login</h2>
-  <form action="{{$Request.root}}/my/auth" method="POST">
+  <form action="{{$Request.root}}/my/auth/check" method="POST">
     <div class="form-group">
-      <label for="login_username">Email address</label>
+      <label for="login_username">Username</label>
       <input class="form-control" id="login_username" name="username" placeholder="Username">
     </div>
     <div class="form-group">

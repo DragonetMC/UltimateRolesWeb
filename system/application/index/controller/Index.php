@@ -4,7 +4,6 @@ namespace app\index\controller;
 use app\common\model\PerkInstance;
 use app\common\model\ShopItem;
 use app\common\model\User;
-use think\Controller;
 
 class Index extends BaseIndexController
 {

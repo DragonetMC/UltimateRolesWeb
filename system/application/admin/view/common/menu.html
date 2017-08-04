@@ -1,0 +1,24 @@
+<li class="sidebar-brand">
+  <a href="{{$Request.root}}/admin">
+    <h1>Admin Panel</h1>
+  </a>
+</li>
+<hr />
+<li><a href="{{$Request.root}}/{{$Request.module}}">Admin Home</a></li>
+<li>
+  <li><a href="{{$Request.root}}/{{$Request.module}}/perks">Perks</a></li>
+  <ul>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/perks/create">create perk</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/perks/applications">apply perk to server(s)</a></li>
+  </ul>
+</li>
+<li>
+  <li><a href="{{$Request.root}}/{{$Request.module}}/shop">Shop</a></li>
+  <ul>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/shop/createItem">create shop item</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/shop/categories">manage categories</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/shop/featured">manage featured items</a></li>
+  </ul>
+</li>
+<hr />
+<li><a href="{{$Request.root}}/{{$Request.module}}/auth/logout">Logout</a></li>

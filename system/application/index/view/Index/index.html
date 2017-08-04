@@ -53,11 +53,22 @@
     <div class="container-fluid" style="padding-bottom: 8px; ">
       {{empty name="Think.session.user_id"}}
         Not logged in, <a onclick="$('.login-form').toggle(); ">login now</a>! 
-        {{include file="common/login" /}}
+        {{include file="common@common/login" /}}
       {{else /}}
-        <!-- TODO -->
+        Username: {{$Think.session.user_name}}<br />
+        Balance: <span id="info_balance"></span><br />
+        Perks: <span id="info_perks"></span><br />
       {{/empty}}
     </div>
   </div>
 </div>
+{{/block}}
+{{block name="scripts"}}
+<script type="text/javascript">
+$(".login-form").toggle();
+{{notempty name="Think.session.user_id"}}
+value("{{$Request.root}}/api/user/balance", "#info_balance");
+value("{{$Request.root}}/api/user/perks", "#info_perks");
+{{/notempty}}
+</script>
 {{/block}}

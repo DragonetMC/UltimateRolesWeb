@@ -5,8 +5,10 @@
 </li>
 <div style="color: #fff; padding-left: 16px; ">
 {{empty name="Think.session.user_id"}}
-Not logged in, <a href="{{$Request.root}}/my/login">login now</a>! 
+Not logged in, <a href="{{$Request.root}}/my/auth/login">login now</a>! 
 {{else /}}
+Welcome, {{$Think.session.user_name}}! <br />
+&gt;&gt; Home 
 {{/empty}}
 </div>
 <hr />
