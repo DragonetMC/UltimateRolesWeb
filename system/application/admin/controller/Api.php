@@ -25,6 +25,8 @@ class Api extends Rest {
         return json(array_merge(["status" => $status, "message" => $message], $data), 200);
     }
 
+    /* ==== statistics == */
+
     public function countPlayers() {
         return $this->json(["value" => User::count()]);
     }
@@ -39,5 +41,24 @@ class Api extends Rest {
 
     public function countPerkPurchases() {
         return $this->json(["value" => PerkInstance::count()]);
+    }
+
+    /* ==== perks ==== */
+    public function perks($page = 1, $pageLimit = 20) {
+        $page = intval($page);
+        if($page < 1) $page = 1;
+        $pageLimit = 2;
+        $perkPaginator = Perk::paginate($pageLimit, false, ["page" => $page]);
+        $perks = $perkPaginator->items();
+        $result = [
+            "page" => $page,
+            "maxPage" => $perkPaginator->lastPage()
+        ];
+        $perks_array = [];
+        foreach($perks as $p) {
+            $perks_array[] = $p->toArray();
+        }
+        $result["perks"] = $perks_array;
+        return $this->json($result);
     }
 }

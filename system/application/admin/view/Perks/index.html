@@ -1,0 +1,84 @@
+{{extend name="common@common/template" /}}
+{{block name="title"}}Admin Panel{{/block}}
+{{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="imports"}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/css/dataTables.jqueryui.css" integrity="sha256-Qqu7okRW4E0cvBxRSujqETU0c6N3fl0mB3oNXkd/B+E=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/css/jquery.dataTables.min.css" integrity="sha256-TntJ2hIwyiYc8GIhWzIt+PvYBfQE4VfxJnn+ea5kcJs=" crossorigin="anonymous" />
+{{/block}}
+{{block name="body"}}
+<div class="col-lg-12" style="border: 1px solid #ddd; ">
+  <table id="perks" style="width: 100%; text-align: center; " class="display">
+    <thead>
+      <tr>
+        <td style="width: 10%; ">ID</td>
+        <td style="width: 30%; ">Name</td>
+        <td style="width: 20%; ">Applied To</td>
+        <td style="width: 40%; ">Actions</td>
+      </tr>
+    </thead>
+  </table>
+  <div style="color: #111; font-size: 1.4em; padding-right: 5%; ">
+  Page: <span id="paginator_current"></span> / <span id="paginator_max"></span></div>
+  <button id="page_previous" class="btn btn-default" disabled>Previous</button> <button id="page_next" class="btn btn-default" disabled>Next</button>
+</div>
+{{/block}}
+{{block name="scripts"}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/js/jquery.dataTables.min.js" integrity="sha256-j007R7R6ijEWPa1df7FeJ6AFbQeww0xgif2SJWZOhHw=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+var page = 1;
+var maxPage = 1;
+var pageLimit = 10;
+var table = $("#perks").DataTable({
+  ordering: false, 
+  paging: false
+});
+var loading = false;
+
+reload();
+
+$("#page_next").click(function(){
+  if(loading) return;
+  if (page < maxPage) {
+    page ++;
+    reload();
+  }
+});
+
+$("#page_previous").click(function(){
+  if(loading) return;
+  if (page > 1) {
+    page --;
+    reload();
+  }
+});
+
+function reload() {
+  if(loading) return;
+  loading = true;
+  table.clear();
+  $.getJSON("{{$Request.root}}/{{$Request.module}}/api/perks/page/" + page + "/pageLimit/" + pageLimit, onDataRefreshed);
+}
+
+function onDataRefreshed(result) {
+  // loop processing each perk
+  $.each(result.perks, function(key, value){
+    table.row.add([value.id, value.name, "(TODO)", ""]);
+  });
+  table.draw(false);
+  maxPage = result.maxPage;
+  $("#paginator_current").html(result.page);
+  $("#paginator_max").html(result.maxPage);
+  if (page == maxPage) {
+    $("#page_next").attr("disabled", "");
+  } else {
+    $("#page_next").removeAttr("disabled");
+  }
+  if (page == 1) {
+    $("#page_previous").attr("disabled", "");
+  } else {
+    $("#page_previous").removeAttr("disabled");
+  }
+  loading = false;
+}
+</script>
+{{/block}}

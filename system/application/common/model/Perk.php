@@ -9,4 +9,7 @@ use think\Model;
 class Perk extends Model {
     protected $table = "perks";
 
+    public function applications() {
+        return $this->hasMany("PerkApplication", "perkId");
+    }
 }
