@@ -1,0 +1,86 @@
+{{extend name="common@common/template" /}}
+{{block name="title"}}Admin Panel{{/block}}
+{{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="imports"}}
+<style type="text/css">
+#applications li {
+  color: #66a;
+  font-weight: bold; 
+}
+</style>
+{{/block}}
+{{block name="body"}}
+<h1>Apply Roles to Server(s)</h2>
+<h4>you can manage servers or server groups settings from the left panel. <h4>
+<h4>you have to set the <code>server-name</code> and <code>group-name</code> in each individual server in order to get it working. <h4>
+<h4>those two settings are in <code>config.yml</code> located in Spigot/CraftBukkit's plugin folder. </h4>
+<h2>Editing Role: <strong><code>{{$perk.name}}</code></strong></h2>
+<h3>Apply to Server(s)</h3>
+<button class="btn btn-info" onclick="addApplication(false);">add server</button>&nbsp;&nbsp;<button class="btn btn-info" onclick="addApplication(true);">add server group</button><br />
+<h3>Current applications: <button id="btnReload" onclick="reload();" class="btn btn-warning">reload</button><h3>
+<ul id="applications">
+{{volist name="perk.applications" id="appl"}}
+  <li>{{$appl.definition.display}} <button class="btn btn-danger" onclick="removeApplication({{$appl.id}});">x</button></li>
+{{/volist}}
+</ul>
+{{/block}}
+{{block name="scripts"}}
+<script type="text/javascript">
+
+var url = "{{$Request.root}}/{{$Request.module}}/api"
+var loading = false;
+
+function reload() {
+  if(loading) return;
+  loading = true;
+  $("#btnReload").attr("disabled", "");
+  $("#btnReload").html("reloading... ");
+  api(url + "/perkApplications/perkId/{{$perk.id}}", function(status, result) {
+    if(!status) {
+      reloading = false;
+      $("#btnReload").removeAttr("disabled");
+      $("#btnReload").html("reload");
+      return;
+    }
+    var total = "";
+    $.each(result.data, function(key, val) {
+      total += "<li>" + val.display + " <button class=\"btn btn-danger\" onclick=\"removeApplication(" + val.id + ");\">x</button></li>";
+    });
+    $("#applications").html(total);
+    reloading = false;
+    $("#btnReload").removeAttr("disabled");
+    $("#btnReload").html("reload");
+  });
+}
+
+function addApplication(b_group) {
+  var args = {
+    group: b_group == true,
+    perk: {
+      id: {{$perk.id}},
+      name: "{{$perk.name}}"
+    }
+  };
+  var dialog_url = "{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/dialogAddApplication"
+    + (b_group == true ? "?group" : "");
+  var dialog_options = "dialogWidth: 600px; dialogHeight: 200px; center: true; ";
+  var ret = showModalDialog(dialog_url, args, dialog_options);
+  if(ret == true){
+    reload();
+  } else if(ret != false) {
+    alert("Failed to add application! \nReason: " + ret);
+  }
+}
+
+function removeApplication(applId) {
+  api(url + "/removePerkApplication/applId/" + applId, function(status, result) {
+    if (status != true) {
+      alert("Error! \nReason: " + status);
+      return;
+    }
+    reload();
+  });
+}
+
+</script>
+{{/block}}

@@ -13,11 +13,13 @@ Welcome, {{$Think.session.user_name}}! <a href="{{$Request.root}}/my/auth/logout
 </div>
 <hr />
 <li><a href="{{$Request.root}}">Home</a></li>
-{{empty name="Think.session.user_id"}}
-<li><a href="{{$Request.root}}/my/auth/login">My</a></li>
-{{else /}}
-<li><a href="{{$Request.root}}/my">My</a></li>
-{{/empty}}
+<li>
+  <a href="{{$Request.root}}/my">My</a>
+  <ul id="my_pages">
+    <li><a href="{{$Request.root}}/{{$Request.module}}/Index/index">My Home</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/Perks/index">Manage Roles</a></li>
+  </ul>
+</li>
 <hr />
 <li>
   <a href="{{$Request.root}}/shop">Shop</a>

@@ -1,0 +1,41 @@
+{{extend name="common@common/template" /}}
+{{block name="title"}}Admin Panel{{/block}}
+{{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="imports"}}
+  <link href="https://cdn.bootcss.com/datatables/1.10.16/css/dataTables.jqueryui.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/datatables/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+  <style>
+  .box {
+    border: 1px solid #ccc; 
+  }
+  
+  .box-inner {
+    border: 1px solid #eee;
+    font-size: 1.25em;
+  }
+  </style>
+{{/block}}
+{{block name="body"}}
+<div class="col-lg-12 box">
+  <h2>Create Role</h2>
+  <div class="col-lg-6 col-sm-12 box-inner">
+    <h3>Details</h3>
+    <p>Basic information. </p>
+    <form action="{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/updatePerk" method="POST">
+      <strong>Name</strong>: <input class="form-control" name="name" value="" /><br />
+      <strong>Description</strong>: <br />
+      <textarea id="desc" name="description"></textarea><br />
+      <input type="submit" class="btn btn-primary" value="Update" />
+    </form>
+  </div>
+</div>
+{{/block}}
+{{block name="scripts"}}
+<script src="https://cdn.bootcss.com/ckeditor/4.7.2/ckeditor.js"></script>
+<script src="https://cdn.bootcss.com/ckeditor/4.7.2/adapters/jquery.js"></script>
+<script src="https://cdn.bootcss.com/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+
+$("#desc").ckeditor();
+</script>
+{{/block}}

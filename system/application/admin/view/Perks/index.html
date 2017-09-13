@@ -56,13 +56,20 @@ function reload() {
   if(loading) return;
   loading = true;
   table.clear();
-  $.getJSON("{{$Request.root}}/{{$Request.module}}/api/perks/page/" + page + "/pageLimit/" + pageLimit, onDataRefreshed);
+  $.getJSON("{{$Request.root}}/{{$Request.module}}/api/perks/parseApplications/yes/page/" + page + "/pageLimit/" + pageLimit, onDataRefreshed);
 }
 
 function onDataRefreshed(result) {
   // loop processing each perk
   $.each(result.perks, function(key, value){
-    table.row.add([value.id, value.name, "(TODO)", ""]);
+    table.row.add([
+    value.id, 
+    value.name, 
+    ((value.applications.length > 0 ? 
+      value.applications.join(", ") : 
+      "(none)") + 
+    " <hr /><a class='btn btn-info' href='{{$Request.root}}/{{$Request.module}}/perks/editApplications/perkId/" + value.id + "'>edit</a>"), 
+    "<a href='{{$Request.root}}/{{$Request.module}}/perks/edit/perkId/" + value.id + "' class='btn btn-primary'>Edit</a> <a href='#' onclick='deletePerk(" + value.id + ")' class='btn btn-danger'>Delete</a>"]);
   });
   table.draw(false);
   maxPage = result.maxPage;
@@ -79,6 +86,21 @@ function onDataRefreshed(result) {
     $("#page_previous").removeAttr("disabled");
   }
   loading = false;
+}
+
+function deletePerk(perkId) {
+  var c = confirm("You will DELETE perk with ID [" + perkId + "] and \n" + 
+                  "ALL assosiated shop items and instances will be DELETED as well!! \n\n" + 
+                  "CONFIRM DELETING? ");
+  if(!c) return;
+  $.getJSON("{{$Request.root}}/{{$Request.module}}/api/deletePerk/perkId/" + perkId, function(data){
+    var r = data.deletion;
+    if (r[0] == "success") {
+      reload();
+    } else {
+      alert("Deletion FAILED! \n Reason: " + r[1]);
+    }
+  });
 }
 </script>
 {{/block}}

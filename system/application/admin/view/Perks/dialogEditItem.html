@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        font-size: 2.5em;
+      }
+      input {
+        font-size: 1em;
+      }
+      select {
+        font-size: 1em;
+      }
+      .c {
+        font-weight: bold; 
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body style="background-color: #eee; ">
+    <div class="c">Edit Item (#{{$item.id}})</div>
+    <hr />
+    <form id="form_edit_item" onsubmit="update(); return false;" class="box-inner">
+      Type: 
+      <select name="itemType">
+        <option value="0" {{eq name="item.itemType" value="0"}}selected{{/eq}}>Permission Node</option>
+        <option value="1" {{eq name="item.itemType" value="1"}}selected{{/eq}}>Permission Group</option>
+        <option value="2" {{eq name="item.itemType" value="2"}}selected{{/eq}}>Player Prefix</option>
+      </select><br />
+      Value: <input name="value" value="{{$item.value}}" /><br />
+      <input type="submit" value="edit" />
+    </form>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{{$Request.root}}/js/utils.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      // window.returnValue = 123;
+      var url = "{{$Request.root}}/{{$Request.module}}/api";
+      
+      window.returnValue = false;
+      
+      function update() {
+        $.post(url + "/updatePerkItem/itemId/{{$item.id}}", $("#form_edit_item").serialize(), function(result) {
+          var status = result.status == "success" ? true : result.message;
+          if(status != true) {
+            window.returnValue = status;
+            window.close();
+          } else {
+            window.returnValue = true;
+            window.close();
+          }
+        }, "json");
+      }
+    </script>
+  </body>
+</html>

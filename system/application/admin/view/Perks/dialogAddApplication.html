@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        font-size: 1.6em;
+      }
+      input {
+        font-size: 1em;
+      }
+      select {
+        font-size: 1em;
+      }
+      .c {
+        font-weight: bold; 
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body style="background-color: #eee; ">
+    <div class="c">Add Application for <span id="rank_name"></span></div>
+    <hr />
+    Type: <span id="server_type"></span>
+    <form id="form_add_application" onsubmit="update(); return false;" class="box-inner">
+      <input type="hidden" id="perkId" name="perkId" value="" />
+      Definition: 
+      <select name="definitionId">
+        {{volist name="definitions" id="def"}}
+          <option value="{{$def.id}}">{{$def.display}}</option>
+        {{/volist}}
+      </select><br />
+      <input type="submit" value="save" />
+    </form>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{{$Request.root}}/js/utils.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      // window.returnValue = 123;
+      var url = "{{$Request.root}}/{{$Request.module}}/api";
+      
+      $("#perkId").get(0).value = window.dialogArguments.perk.id;
+      $("#rank_name").html(window.dialogArguments.perk.name);
+      $("#server_type").html(window.dialogArguments.group != true ? "Single Server" : "Server Group");
+      
+      window.returnValue = false;
+      
+      function update() {
+        $.post(url + "/addPerkApplication", $("#form_add_application").serialize(), function(result) {
+          var status = result.status == "success" ? true : result.message;
+          if(status != true) {
+            window.returnValue = status;
+            window.close();
+          } else {
+            window.returnValue = true;
+            window.close();
+          }
+        }, "json");
+      }
+    </script>
+  </body>
+</html>

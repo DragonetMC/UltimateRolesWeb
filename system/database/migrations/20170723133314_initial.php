@@ -52,26 +52,36 @@ class Initial extends Migrator
         // perks
         $this->table("perks")
             ->addColumn("name", "string")
+            ->addColumn("description", "string", ["limit" => \Phinx\Db\Adapter\MysqlAdapter::TEXT_LONG])
+            ->save();
+
+        $this->table("perk_items")
             /*
              * Of perk type
              * 0: permission list, separated by ";". eg. "myplugin.perm1;myplugin.perm2,-someplugin.denied_perm"
              * 1: permission group list, separated by ";". eg. "group.vip;group.vip2;-group.stupid_group"
-             * 2: item list, format "ID/DAMAGE/COUNT", separated by ";". rg. "1/0/1;2/0/1"
+             * 2: prefix
              *
              * if set to 2 for items, `oneTime` option is suggested to set to true
              */
-            ->addColumn("perkType", "integer")
-            ->addColumn("oneTime", "boolean")
+            ->addColumn("perkId", "integer")
+            ->addColumn("itemType", "integer")
+            ->addColumn("description", "string")
             ->addColumn("value", "string")
-            ->addColumn("description", "string", ["limit" => \Phinx\Db\Adapter\MysqlAdapter::TEXT_LONG])
+            ->addForeignKey("perkId", "perks", "id", ["delete" => "CASCADE"])
+            ->save();
+
+        $this->table("server_definition")
+            ->addColumn("name", "string")
+            ->addColumn("group", "boolean")
+            ->addColumn("value", "string")
             ->save();
 
         // which servers should a perk apply to?
         // can have multiple applications
         $this->table("perk_applications")
             ->addColumn("perkId", "integer")->addForeignKey("perkId", "perks", "id", ["delete" => "CASCADE"])
-            ->addColumn("applyToGroup", "boolean")
-            ->addColumn("applicant", "string")
+            ->addColumn("definitionId", "integer")->addForeignKey("definitionId", "server_definition", "id", ["delete" => "CASCADE"])
             ->save();
 
         // shop items

@@ -32,6 +32,13 @@ class Auth extends Controller {
         session("user_id", $m->id);
         session("user_name", $m->username);
 
+        $this->redirect("my/index/index");
+        return;
+    }
 
+    public function logout() {
+        session("user_id", null);
+        session("user_name", null);
+        $this->redirect("index/index/index");
     }
 }

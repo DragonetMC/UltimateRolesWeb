@@ -1,0 +1,142 @@
+{{extend name="common@common/template" /}}
+{{block name="title"}}Admin Panel{{/block}}
+{{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="imports"}}
+  <link href="https://cdn.bootcss.com/datatables/1.10.16/css/dataTables.jqueryui.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/datatables/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+  <style>
+  .box {
+    border: 1px solid #ccc; 
+  }
+  
+  .box-inner {
+    border: 1px solid #eee;
+    font-size: 1.25em;
+  }
+  </style>
+{{/block}}
+{{block name="body"}}
+<div class="col-lg-12 box">
+  <h2>Edit Role</h2>
+  <div class="col-lg-6 col-sm-12 box-inner">
+    <h3>Details</h3>
+    <p>Basic information. </p>
+    <form action="{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/updatePerk/perkId/{{$perk.id}}" method="POST">
+      <strong>ID: </strong>{{$perk.id}}<br />
+      <strong>Applied to: </strong>
+      {{volist name="perk.applications" id="appl"}}
+      <span style="color: blue; ">{{$appl.definition.display}}</span>&nbsp;
+      {{/volist}}
+      (<a href="{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/editApplications/perkId/{{$perk.id}}">Edit</a>)<br />
+      <strong>Name</strong>: <input class="form-control" name="name" value="{{$perk.name}}" /><br />
+      <strong>Description</strong>: <br />
+      <textarea id="desc" name="description">{{$perk.description}}</textarea><br />
+      <input type="submit" class="btn btn-primary" value="Update" />
+    </form>
+  </div>
+  <div class="col-lg-6 col-sm-12 box-inner">
+    <h3>Items</h3>
+    <p>Role items is a set of permissions, groups and prefixes. <br />
+    Type is a double char field, <code>PM</code> for permission, <code>GR</code> for group, <code>PF</code> for prefix. </p>
+    <form id="form_add_item" onsubmit="return false;" class="box-inner">
+      Type: 
+      <select name="itemType">
+        <option value="0">Permission Node</option>
+        <option value="1">Permission Group</option>
+        <option value="2">Player Prefix</option>
+      </select>
+      Value: <input name="value" />
+      <input type="submit" onclick="newItem();" value="add" />
+    </form>
+    <button id="btnReload" onclick="reload();" class="btn btn-info">reload</button>
+    <table id="items" style="width: 100%; text-align: center; ">
+      <thead>
+        <tr>
+          <td width="5%">Type</td>
+          <td width="50%">Value</td>
+          <td width="45%">Actions</td>
+        </tr>
+      </thead>
+      <tbody>
+{{volist name="perk.items" id="item"}}
+        <tr>
+          <td>{{$item.displayType}}</td>
+          <td>{{$item.value}}</td>
+          <td><button onclick="editItem({{$item.id}});" class="btn btn-info">change</button><button onclick="deleteItem({{$item.id}})" class="btn btn-danger">del</button></td>
+        </tr>
+{{/volist}}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{/block}}
+{{block name="scripts"}}
+<script src="https://cdn.bootcss.com/ckeditor/4.7.2/ckeditor.js"></script>
+<script src="https://cdn.bootcss.com/ckeditor/4.7.2/adapters/jquery.js"></script>
+<script src="https://cdn.bootcss.com/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+
+var url = "{{$Request.root}}/{{$Request.module}}/api";
+var loading = false;
+
+// we don't call reload on load because server is already sent us the data we need
+
+$("#desc").ckeditor();
+var tb = $("#items").DataTable({
+  paging: false
+});
+
+function reload() {
+  if(loading) return;
+  loading = true;
+  $("#btnReload").html("reloading...");
+  $("#btnReload").attr("disabled", "");
+  tb.clear();
+  api(url + "/perkItems/perkId/{{$perk.id}}", function(status, result){
+    if(status != true) {
+      alert("Error! \nReason: " + status);
+      $("#btnReload").html("reload");
+      $("#btnReload").removeAttr("disabled");
+      loading = false;
+      return;
+    }
+    $.each(result.items, function(key, item){
+      var action = '<button onclick="editItem(' + item.id + ');" class="btn btn-info">change</button><button onclick="deleteItem(' + item.id + ')" class="btn btn-danger">del</button>';
+      tb.row.add([item.displayType, item.value, action]);
+    });
+    tb.draw(false);
+    $("#btnReload").html("reload");
+    $("#btnReload").removeAttr("disabled");
+    loading = false;
+  });
+}
+
+function newItem() {
+  var data = $("#form_add_item").serialize();
+  $.post(url + "/updatePerkItem/perkId/{{$perk.id}}", data, function(result) {
+    if(result.status == "success") {
+      reload();
+    }
+  }, "json");
+}
+
+function editItem(itemId) {
+  var ret = window.showModalDialog("{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/dialogEditItem/itemId/" + itemId,{},"dialogWidth: 900px; dialogHeight: 400px; center: yes; ");
+  if(ret != true && ret != false) {
+    alert("Failed to edit! \n Reason: " + ret);
+  } else {
+    reload();
+  }
+}
+
+function deleteItem(itemId) {
+  api(url + "/deletePerkItem/itemId/" + itemId, function(status, result) {
+    if(status != true) {
+      alert("Error! \nReason: " + status);
+      return;
+    }
+    reload();
+  });
+}
+</script>
+{{/block}}

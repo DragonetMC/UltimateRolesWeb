@@ -1,0 +1,8 @@
+{{extend name="common@common/template" /}}
+{{block name="title"}}Admin Panel{{/block}}
+{{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="body"}}
+<h2>Error</h2>
+{{$message}}<br />
+<a href="javascript:history.go(-1);">go back</a>
+{{/block}}

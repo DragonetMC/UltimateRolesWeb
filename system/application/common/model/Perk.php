@@ -12,4 +12,8 @@ class Perk extends Model {
     public function applications() {
         return $this->hasMany("PerkApplication", "perkId");
     }
+
+    public function items() {
+        return $this->hasMany("PerkItem", "perkId");
+    }
 }
