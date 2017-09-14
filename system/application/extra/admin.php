@@ -3,5 +3,5 @@ return [
     /**
      * login password for admin panel
      */
-    "password" => sha1("TimerPerksAdmin")
+    "password" => sha1("UltimateRolesAdmin")
 ];

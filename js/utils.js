@@ -25,3 +25,12 @@ function value(url, jquery_filter) {
     }
   });
 }
+
+function buttonToggle(jquery_filter, status, text) {
+  $(jquery_filter).html(text);
+  if(status == true) {
+    $(jquery_filter).removeAttr("disabled");
+  } else {
+    $(jquery_filter).attr("disabled", "");
+  }
+}

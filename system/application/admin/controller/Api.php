@@ -51,6 +51,13 @@ class Api extends Rest {
         return $this->json(["value" => PerkInstance::count()]);
     }
 
+    public function userBalance($userId) {
+        $userId = intval($userId);
+        $user = User::get($userId);
+        if(!$user) return $this->json(["value" => config("lang.player_not_found")]);
+        return $this->json(["value" => ($user->balance . " " . config("settings.currency_unit"))]);
+    }
+
     /* ==== perks ==== */
     public function perks($page = 1, $pageLimit = 20, $parseApplications = false) {
         $page = intval($page);
@@ -172,11 +179,11 @@ class Api extends Rest {
         }
         $p = Perk::get(intval($_POST["perkId"]));
         if(!$p) {
-            return $this->json([], "error", "can not find the perk! ");
+            return $this->json([], "error", config("lang.perk_not_found"));
         }
         $def = ServerDefinition::get($defId);
         if(!$def) {
-            return $this->json([], "error", "can not find the perk! ");
+            return $this->json([], "error", config("lang.perk_not_found"));
         }
         $appl = PerkApplication::create([
             "perkId" => $p->id,
@@ -199,10 +206,14 @@ class Api extends Rest {
     }
 
     /* ==== players ==== */
-    public function players($page = 1, $pageLimit = 20) {
+    public function players($conditionUsername = null, $page = 1, $pageLimit = 20) {
         $page = intval($page);
         if ($page < 1) $page = 1;
-        $userPaginator = User::paginate($pageLimit, false, ["page" => $page]);
+        if($conditionUsername === null) {
+            $userPaginator = User::paginate($pageLimit, false, ["page" => $page]);
+        } else {
+            $userPaginator = User::whereLike("username", "%$conditionUsername%")->paginate($pageLimit, false, ["page" => $page]);
+        }
         $users = $userPaginator->items();
         $result = [
             "page" => $page,
@@ -216,5 +227,80 @@ class Api extends Rest {
         }
         $result["users"] = $data;
         return $this->json($result);
+    }
+
+    public function userPerks($userId) {
+        $userId = intval($userId);
+        $user = User::get($userId);
+        if(!$user) return $this->json([], "error", config("lang.player_not_found"));
+        $instances = $user->perks;
+        $ret = [];
+        foreach($instances as $i) {
+            $data = $i->toArray();
+            $data["expired"] = $i->expired;
+            $data["perk"] = $i->perk->toArray();
+            $ret[] = $data;
+        }
+        return $this->json(["instances" => $ret]);
+    }
+
+    public function changeRoleEndTime($instanceId, $endTime) {
+        $instanceId = intval($instanceId);
+        $endTime = intval($endTime) === -1 ? -1 : strtotime(trim($endTime));
+        if($endTime === false){
+            return $this->json([], "error", "Incorrect date time format! ");
+        }
+        $i = PerkInstance::get($instanceId);
+        if(!$i) {
+            return $this->json([], "error", "Failed to find the instance! ");
+        }
+        $i->endTime = $endTime;
+        $i->save();
+        return $this->json();
+    }
+
+    public function addRoleInstance() {
+        if(!Validate::make([
+            "userId" => "require|number",
+            "perkId" => "require|number",
+            "endTime" => "require"
+        ])->check($_POST)) {
+            return $this->json([], "error", config("lang.invalid_data") . print_r($_POST, true));
+        }
+        $endTime = intval($_POST["endTime"]) === -1 ? -1 : strtotime(trim($_POST["endTime"]));
+        if($endTime === false) {
+            return $this->json([], "error", config("lang.invalid_data") . print_r($_POST, true));
+        }
+        $userId = intval($_POST["userId"]);
+        $user = User::get($userId);
+        if(!$user) {
+            return $this->json([], "error", config("lang.player_not_found") . print_r($_POST, true));
+        }
+        $perkId = intval($_POST["perkId"]);
+        $perk = Perk::get($perkId);
+        if(!$perk) {
+            return $this->json([], "error", config("lang.perk_not_found") . print_r($_POST, true));
+        }
+        $instance = PerkInstance::create([
+            "userId" => $user->id,
+            "perkId" => $perk->id,
+            "purchasedTime" => time(),
+            "endTime" => $endTime
+        ]);
+        if($instance) {
+            return $this->json();
+        } else {
+            return $this->json([], "error", "Failed to create! ");
+        }
+    }
+
+    public function deleteRoleInstance($instanceId) {
+        $instanceId = intval($instanceId);
+        $i = PerkInstance::get($instanceId);
+        if(!$i) {
+            return $this->json([], "error", "Failed to find the instance! ");
+        }
+        $i->delete();
+        return $this->json();
     }
 }

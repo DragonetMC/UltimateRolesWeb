@@ -6,14 +6,22 @@
 <hr />
 <li><a href="{{$Request.root}}/{{$Request.module}}">Admin Home</a></li>
 <li>
-  <li><a href="{{$Request.root}}/{{$Request.module}}/perks">Roles</a></li>
+  <li style="color: #aaf;">Players</li>
   <ul>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/players">all players</a></li>
+  </ul>
+</li>
+<li>
+  <li style="color: #aaf;">Roles</li>
+  <ul>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/perks">all roles</a></li>
     <li><a href="{{$Request.root}}/{{$Request.module}}/perks/create">create role</a></li>
   </ul>
 </li>
 <li>
-  <li><a href="{{$Request.root}}/{{$Request.module}}/shop">Shop</a></li>
+  <li style="color: #aaf;">Shop</li>
   <ul>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/shop">all items</a></li>
     <li><a href="{{$Request.root}}/{{$Request.module}}/shop/createItem">create shop item</a></li>
     <li><a href="{{$Request.root}}/{{$Request.module}}/shop/categories">manage categories</a></li>
     <li><a href="{{$Request.root}}/{{$Request.module}}/shop/featured">manage featured items</a></li>

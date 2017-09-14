@@ -1,0 +1,149 @@
+{{extend name="common@common/template" /}}
+{{block name="title"}}Admin Panel{{/block}}
+{{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="imports"}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/css/dataTables.jqueryui.css" integrity="sha256-Qqu7okRW4E0cvBxRSujqETU0c6N3fl0mB3oNXkd/B+E=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/css/jquery.dataTables.min.css" integrity="sha256-TntJ2hIwyiYc8GIhWzIt+PvYBfQE4VfxJnn+ea5kcJs=" crossorigin="anonymous" />
+{{/block}}
+{{block name="body"}}
+<div class="container-fluid">
+  <h2><strong>Player Detail of [{{$user.username}}]</strong></h2>
+  <hr />
+  <div class="col-lg-12" style="font-size: 1.2em; ">
+    <strong>ID: </strong>{{$user.id}}<br />
+    <strong>Username: </strong>{{$user.username}}<br />
+    <strong>UUID: </strong>{{$user.uuid}}<br />
+    <strong>Balance: </strong><span id="value_balance" style="color: #66f;">{{$user.balance}} {{$currency_unit}}</span>
+    <button class="btn btn-info" onclick="manageBalance(); ">manage</button>
+    <button class="btn btn-info" onclick="reloadBalance(); ">refresh</button>
+    <br />
+    <strong>Password Status: </strong>
+    {{eq name="user.passwordSet" value="1"}}
+    <code>normal</code>
+    {{else /}}
+    <code>password NOT set! </code>
+    {{/eq}}
+    <a href="{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/resetPassword/userId/{{$user.id}}" class="btn btn-warning">Reset Password</a><br />
+    <hr/>
+  </div>
+  <div class="col-lg-12" style="font-size: 1.2em; ">
+    <h3>Roles <button class="btn btn-primary" onclick="addRole(); ">add role</button><button class="btn btn-info" id="btnReloadRoles" onclick="reloadRoles(); ">reload</button></h3>
+    <table id="roles_table" style="text-align: center; ">
+      <thead>
+        <tr>
+          <td width="10%">#</td>
+          <td width="40%">Role Name</td>
+          <td width="20%">Expire Date</td>
+          <td width="10%">Status</td>
+          <td width="20%">Actions</td>
+        </tr>
+      </thead>
+    </table>
+    <div id="actions_template" style="display: none; "><!--
+      <button class="btn btn-warning" onclick="changeRoleEndTime(%key%);">change expire time</button>
+      <button class="btn btn-danger" onclick="deleteRole(%instanceId%);">delete</button>
+    --></div>
+  </div>
+</div>
+{{/block}}
+{{block name="scripts"}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/js/jquery.dataTables.min.js" integrity="sha256-j007R7R6ijEWPa1df7FeJ6AFbQeww0xgif2SJWZOhHw=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+var url = "{{$Request.root}}/{{$Request.module}}/api";
+
+var loading_roles = false;
+var roles_cache = null;
+
+var userId = {{$user.id}};
+
+var roles_table = $("#roles_table").DataTable({
+  ordering: false, 
+  paging: false
+});
+
+reloadRoles();
+
+function reloadBalance() {
+  value(url + "/userBalance/userId/" + userId, "#value_balance");
+}
+
+function reloadRoles() {
+  if(loading_roles) return;
+  loading_roles = true;
+  buttonToggle("#btnReloadRoles", false, "reloading... ");
+  api(url + "/userPerks/userId/" + userId, function(status, result) {
+    if(status != true) {
+      alert("Failed to load roles! \nReason: " + status);
+      buttonToggle("#btnReloadRoles", true, "reload");
+      loading_roles = false;
+      return;
+    }
+    onRolesFetched(result.instances)
+    buttonToggle("#btnReloadRoles", true, "reload");
+    loading_roles = false;
+  });
+}
+
+function onRolesFetched(instances) {
+  roles_table.clear();
+  roles_cache = instances;
+  $.each(instances, function(key, val) {
+    var actions = $("#actions_template").html()
+      .replace("<!--", "")
+      .replace("-->", "")
+      .replace("%instanceId%", val.id)
+      .replace("%key%", key);
+    roles_table.row.add([
+      val.id,
+      val.perk.name,
+      val.endTime == -1 ? "<span style='color: #d41; '>Permanant</span>" : new Date(parseInt(val.endTime) * 1000),
+      val.endTime == -1 ? "<span style='color: #d41; '>Never</span>" : val.expired ? "<span style='color: red; font-weight: bold; '>EXPIRED</span>" : "<span style='color: #161; font-weight: bold; '>NORMAL</span>",
+      actions
+    ]);
+  });
+  roles_table.draw(false);
+}
+
+function deleteRole(instanceId) {
+  if(!confirm("You really want to delete role [#" + instanceId + "] for player [{{$user.username}}] ? ")) return;
+  api(url + "/deleteRoleInstance/instanceId/" + instanceId, function(status, result) {
+    if (status != true) {
+      alert("Failed to delete! \nReason: " + status);
+      return;
+    }
+    reloadRoles();
+  });
+}
+
+function changeRoleEndTime(key) {
+  var i = roles_cache[key];
+  var current_end = new Date(i.endTime * 1000);
+  var current = current_end.getFullYear() + "-" + current_end.getMonth() + "-" + current_end.getDate() + " ";
+  current += current_end.getHours() + ":" + current_end.getMinutes() + ":" + current_end.getSeconds();
+  
+  var target = prompt("Change the end time to: \nformat: Y-m-d H:i:s\nnote: use -1 for permanant role", current);
+  if(!target) return;
+  
+  api(url + "/changeRoleEndTime/instanceId/" + i.id + "/endTime/" + encodeURI(target), function(status, result) {
+    if (status != true) {
+      alert("Failed to update! \nReason: " + status);
+      return;
+    }
+    reloadRoles();
+  });
+}
+
+function addRole() {
+  var dialog_url = "{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/dialogAddRole/userId/{{$user.id}}"
+  var dialog_options = "dialogWidth: 1200px; dialogHeight: 400px; center: true; ";
+  var ret = window.showModalDialog(dialog_url, {}, dialog_options);
+  if(ret == true){
+    reloadRoles();
+  } else if(ret != false) {
+    alert("Failed to add application! \nReason: " + ret);
+  }
+}
+
+</script>
+{{/block}}

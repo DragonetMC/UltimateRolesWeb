@@ -1,0 +1,129 @@
+{{extend name="common@common/template" /}}
+{{block name="title"}}Admin Panel{{/block}}
+{{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="imports"}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/css/dataTables.jqueryui.css" integrity="sha256-Qqu7okRW4E0cvBxRSujqETU0c6N3fl0mB3oNXkd/B+E=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/css/jquery.dataTables.min.css" integrity="sha256-TntJ2hIwyiYc8GIhWzIt+PvYBfQE4VfxJnn+ea5kcJs=" crossorigin="anonymous" />
+{{/block}}
+{{block name="body"}}
+<div class="container-fluid">
+  <h3>Manage Players</h3>
+  <div id="search_box" class="col-lg-12">
+    <h4>Search Players</h4>
+    <form onsubmit="updateSearch(condition_username.value); return false;">
+      Username: <input id="condition_username" />
+      <input type="submit" value="search" />
+    </form>
+  </div>
+  <div class="col-lg-12">
+    <table id="users" style="font-size: 1.2em; width: 100%; text-align: center; ">
+      <thead>
+        <tr>
+          <td width="5%">ID</td>
+          <td width="10%">Username</td>
+          <td width="25%">UUID</td>
+          <td width="10%">Balance</td>
+          <td width="50%">Actions</td>
+        </tr>
+      </thead>
+    </table>
+    <div style="color: #111; font-size: 1.4em; padding-right: 5%; ">
+    Page: <span id="paginator_current"></span> / <span id="paginator_max"></span></div>
+    <button id="page_previous" class="btn btn-default" disabled>Previous</button> <button id="page_next" class="btn btn-default" disabled>Next</button>
+  </div>
+  <div id="actions_template" style="display: none; "><!--
+  <button class="btn btn-info" onclick="addRole(%userId%)">add role</button>
+  <a href="{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/detail/userId/%userId%" class="btn btn-info">Detail</a>
+  <a href="{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/resetPassword/userId/%userId%" class="btn btn-warning">Reset Password</a>
+  --></div>
+</div>
+{{/block}}
+{{block name="scripts"}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/js/jquery.dataTables.min.js" integrity="sha256-j007R7R6ijEWPa1df7FeJ6AFbQeww0xgif2SJWZOhHw=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+var page = 1;
+var maxPage = 1;
+var pageLimit = 10;
+var table = $("#users").DataTable({
+  ordering: false, 
+  paging: false
+});
+var loading = false;
+
+reload();
+
+$("#page_next").click(function(){
+  if(loading) return;
+  if (page < maxPage) {
+    page ++;
+    reload();
+  }
+});
+
+$("#page_previous").click(function(){
+  if(loading) return;
+  if (page > 1) {
+    page --;
+    reload();
+  }
+});
+
+function updateSearch(condition_username) {
+  if(loading) return;
+  loading = true;
+  table.clear();
+  $.getJSON("{{$Request.root}}/{{$Request.module}}/api/players/conditionUsername/" + condition_username + "/page/" + page + "/pageLimit/" + pageLimit, onDataRefreshed);
+}
+
+function reload() {
+  if(loading) return;
+  loading = true;
+  table.clear();
+  $.getJSON("{{$Request.root}}/{{$Request.module}}/api/players/page/" + page + "/pageLimit/" + pageLimit, onDataRefreshed);
+}
+
+function onDataRefreshed(result) {
+  $.each(result.users, function(key, val) {
+    var actions = $("#actions_template").html();
+    actions = actions.replace("<!--", "")
+      .replace("-->", "")
+      .replace("%userId%", val.id)
+      .replace("%userId%", val.id)
+      .replace("%userId%", val.id);
+    table.row.add([
+      val.id,
+      val.username,
+      "<span style='font-size: 0.8em; '>" + val.uuid + "</span>",
+      "<span style='color: #66f; font-weight: bold; '>" + val.balance + " {{$currency_unit}}</span>",
+      actions,
+    ]);
+  });
+  table.draw(false);
+  maxPage = result.maxPage;
+  $("#paginator_current").html(result.page);
+  $("#paginator_max").html(result.maxPage);
+  if (page == maxPage) {
+    $("#page_next").attr("disabled", "");
+  } else {
+    $("#page_next").removeAttr("disabled");
+  }
+  if (page == 1) {
+    $("#page_previous").attr("disabled", "");
+  } else {
+    $("#page_previous").removeAttr("disabled");
+  }
+  loading = false;
+}
+
+function addRole(userId) {
+  var dialog_url = "{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/dialogAddRole/userId/" + userId
+  var dialog_options = "dialogWidth: 1200px; dialogHeight: 400px; center: true; ";
+  var ret = window.showModalDialog(dialog_url, {}, dialog_options);
+  if(ret == true){
+    alert("{{$Think.config.lang.success}}");
+  } else if(ret != false) {
+    alert("Failed to add application! \nReason: " + ret);
+  }
+}
+</script>
+{{/block}}

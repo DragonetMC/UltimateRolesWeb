@@ -38,6 +38,12 @@ class Initial extends Migrator
             ->addIndex(array('username', 'uuid'), array('unique' => true))
             ->save();
 
+        $this->table("balance_history")
+            ->addColumn("userId", "integer")->addForeignKey("userId", "users", "id", ["delete" => "CASCADE"])
+            ->addColumn("diffValue", "float")
+            ->addColumn("reason", "string")
+            ->save();
+
         // == login tokens (login from game) ==
         $this->table("login_tokens")
             ->addColumn("userId", "integer")->addForeignKey("userId", "users", "id", ["delete" => "CASCADE"])

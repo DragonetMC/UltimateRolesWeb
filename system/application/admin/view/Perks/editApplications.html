@@ -64,7 +64,7 @@ function addApplication(b_group) {
   var dialog_url = "{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/dialogAddApplication"
     + (b_group == true ? "?group" : "");
   var dialog_options = "dialogWidth: 600px; dialogHeight: 200px; center: true; ";
-  var ret = showModalDialog(dialog_url, args, dialog_options);
+  var ret = window.showModalDialog(dialog_url, args, dialog_options);
   if(ret == true){
     reload();
   } else if(ret != false) {
