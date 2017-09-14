@@ -98,7 +98,7 @@ function onRolesFetched(instances) {
       val.id,
       val.perk.name,
       val.endTime == -1 ? "<span style='color: #d41; '>Permanant</span>" : new Date(parseInt(val.endTime) * 1000),
-      val.endTime == -1 ? "<span style='color: #d41; '>Never</span>" : val.expired ? "<span style='color: red; font-weight: bold; '>EXPIRED</span>" : "<span style='color: #161; font-weight: bold; '>NORMAL</span>",
+      val.expired ? "<span style='color: red; font-weight: bold; '>EXPIRED</span>" : "<span style='color: #161; font-weight: bold; '>NORMAL</span>",
       actions
     ]);
   });
