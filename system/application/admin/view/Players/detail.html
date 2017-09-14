@@ -136,7 +136,7 @@ function changeRoleEndTime(key) {
 
 function addRole() {
   var dialog_url = "{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/dialogAddRole/userId/{{$user.id}}"
-  var dialog_options = "dialogWidth: 1200px; dialogHeight: 400px; center: true; ";
+  var dialog_options = "dialogWidth: 1200px; dialogHeight: 800px; center: true; ";
   var ret = window.showModalDialog(dialog_url, {}, dialog_options);
   if(ret == true){
     reloadRoles();

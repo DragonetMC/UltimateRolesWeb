@@ -117,7 +117,7 @@ function onDataRefreshed(result) {
 
 function addRole(userId) {
   var dialog_url = "{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/dialogAddRole/userId/" + userId
-  var dialog_options = "dialogWidth: 1200px; dialogHeight: 400px; center: true; ";
+  var dialog_options = "dialogWidth: 1200px; dialogHeight: 800px; center: true; ";
   var ret = window.showModalDialog(dialog_url, {}, dialog_options);
   if(ret == true){
     alert("{{$Think.config.lang.success}}");
