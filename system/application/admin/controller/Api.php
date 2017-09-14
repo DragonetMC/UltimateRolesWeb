@@ -15,14 +15,18 @@ use think\controller\Rest;
 use think\Validate;
 
 class Api extends Rest {
-    public function _initialize(){
-        if(!isset($_GET["key"])) {
+    public function __construct(){
+        if(isset($_GET["key"])) {
             $k = $_GET["key"];
             if($k !== config("security.secret_admin")) {
-                $this->json([], "failed", "wrong key");
+                $this->json([], "failed", "wrong key")->send();
                 exit();
             }
+        } else if(!session("?admin")) {
+            $this->json([], "failed", "no key given and not logged in")->send();
+            exit();
         }
+        parent::__construct();
     }
 
     protected function json($data = [], $status = "success", $message = "") {
@@ -192,5 +196,25 @@ class Api extends Rest {
         }
         $appl->delete();
         return $this->json();
+    }
+
+    /* ==== players ==== */
+    public function players($page = 1, $pageLimit = 20) {
+        $page = intval($page);
+        if ($page < 1) $page = 1;
+        $userPaginator = User::paginate($pageLimit, false, ["page" => $page]);
+        $users = $userPaginator->items();
+        $result = [
+            "page" => $page,
+            "maxPage" => $userPaginator->lastPage()
+        ];
+        $data = [];
+        foreach($users as $u) {
+            $d = $u->toArray();
+            unset($d["password"]); // never give away this!!
+            $data[] = $d;
+        }
+        $result["users"] = $data;
+        return $this->json($result);
     }
 }
