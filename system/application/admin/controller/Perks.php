@@ -4,6 +4,7 @@
 namespace app\admin\controller;
 
 
+use app\common\model\DefaultPerk;
 use app\common\model\Perk;
 use app\common\model\PerkItem;
 use app\common\model\ServerDefinition;
@@ -74,6 +75,14 @@ class Perks extends BaseAdminController {
 
     public function dialogAddApplication() {
         $this->assign("definitions", isset($_GET["group"]) ? ServerDefinition::all(["group" => 1]) : ServerDefinition::all());
+        return $this->fetch();
+    }
+
+    public function defaults() {
+        return $this->fetch();
+    }
+
+    public function dialogAddDefaultPerk() {
         return $this->fetch();
     }
 }

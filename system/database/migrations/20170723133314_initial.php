@@ -33,8 +33,8 @@ class Initial extends Migrator
             ->addColumn("username", "string")
             ->addColumn("uuid", "string")
             ->addColumn("password", "string", ["null" => true])
-            ->addColumn("passwordSet", "boolean", [])
-            ->addColumn("balance", "float")
+            ->addColumn("passwordSet", "boolean", ["default" => 0])
+            ->addColumn("balance", "float", ["default" => 0]);
             ->addIndex(array('username', 'uuid'), array('unique' => true))
             ->save();
 
@@ -114,6 +114,10 @@ class Initial extends Migrator
             ->addForeignKey("perkId", "perks", "id", ["delete" => "CASCADE"])
             ->addColumn("purchasedTime", "integer", ["limit" => \Phinx\Db\Adapter\MysqlAdapter::INT_BIG])
             ->addColumn("endTime", "integer", ["limit" => \Phinx\Db\Adapter\MysqlAdapter::INT_BIG])
+            ->save();
+
+        $this->table("default_perks")
+            ->addColumn("perkId", "integer")
             ->save();
     }
 }

@@ -4,6 +4,7 @@
 namespace app\admin\controller;
 
 
+use app\common\model\DefaultPerk;
 use app\common\model\Perk;
 use app\common\model\PerkApplication;
 use app\common\model\PerkInstance;
@@ -302,5 +303,42 @@ class Api extends Rest {
         }
         $i->delete();
         return $this->json();
+    }
+
+    public function defaultPerks() {
+        $ret = [];
+        foreach(DefaultPerk::all() as $perk) {
+            $data = $perk->toArray();
+            $data["perk"] = $perk->perk->toArray();
+            $ret[] = $data;
+        }
+        return $this->json(["perks" => $ret]);
+    }
+
+    public function deleteDefaultPerk($defaultPerkId) {
+        $defaultPerkId = intval($defaultPerkId);
+        $r = DefaultPerk::get($defaultPerkId);
+        if(!$r) {
+            return $this->json([], "error", "Failed to find! ");
+        }
+        $r->delete();
+        return $this->json();
+    }
+
+    public function addDefaultPerk($perkId) {
+        $perkId = intval($perkId);
+        if(DefaultPerk::get(["perkId" => $perkId])) {
+            return $this->json([], "error", "Duplicate role! ");
+        }
+        $r = Perk::get($perkId);
+        if(!$r) {
+            return $this->json([], "error", "Failed to find! ");
+        }
+        $defaultRole = DefaultPerk::create(["perkId" => $r->id]);
+        if($defaultRole) {
+            return $this->json();
+        } else {
+            return $this->json([], "error", "Failed to create! ");
+        }
     }
 }

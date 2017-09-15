@@ -1,0 +1,72 @@
+{{extend name="common@common/template" /}}
+{{block name="title"}}Admin Panel{{/block}}
+{{block name="menu"}}{{include file="common/menu" /}}{{/block}}
+{{block name="imports"}}
+<style type="text/css">
+#perks_list span {
+  font-size: 1.6em;
+  font-weight: bold; 
+}
+</style>
+{{/block}}
+{{block name="body"}}
+<h2>Manage Default Roles</h2>
+<p>Default roles are for everyone! </p>
+<hr />
+<h3>Current Default Roles: <button class="btn btn-primary" onclick="addDefaultPerk(); ">add</button>&nbsp;<button class="btn btn-info" onclick="reload(); ">reload</button></h3>
+<div id="perks_list"></div>
+{{/block}}
+{{block name="scripts"}}
+<script type="text/javascript">
+
+var url = "{{$Request.root}}/{{$Request.module}}/api";
+var loading = false;
+
+reload();
+
+function reload() {
+  // if (loading) return;
+  loading = true;
+  api(url + "/defaultPerks", function(status, result) {
+    if(status != true) {
+      alert("Failed to load! ");
+      loading = false;
+      return;
+    }
+    if(result.perks.length == 0) {
+      $("#perks_list").html("(none)");
+      loading = false;
+      return;
+    }
+    var total = "";
+    $.each(result.perks, function(key, val) {
+      total += "<span>" + val.perk.name + "</span><button class='btn btn-danger' onclick='deleteDefaultPerk(" + val.id + "); '>X</button><br />";
+    });
+    $("#perks_list").html(total);
+    loading = false;
+  });
+}
+
+function addDefaultPerk() {
+  var dialog_url = "{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/dialogAddDefaultPerk"
+  var dialog_options = "dialogWidth: 1200px; dialogHeight: 800px; center: true; ";
+  var ret = window.showModalDialog(dialog_url, {}, dialog_options);
+  if(ret == true){
+    reload();
+  } else if(ret != false) {
+    alert("Failed to add application! \nReason: " + ret);
+  }
+}
+
+function deleteDefaultPerk(defaultPerkId) {
+  api(url + "/deleteDefaultPerk/defaultPerkId/" + defaultPerkId, function(status, result) {
+    if(status != true) {
+      alert("Error! \nReason: " + status);
+    } else {
+      reload();
+    }
+  });
+}
+
+</script>
+{{/block}}
