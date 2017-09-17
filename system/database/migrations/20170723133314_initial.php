@@ -34,7 +34,7 @@ class Initial extends Migrator
             ->addColumn("uuid", "string")
             ->addColumn("password", "string", ["null" => true])
             ->addColumn("passwordSet", "boolean", ["default" => 0])
-            ->addColumn("balance", "float", ["default" => 0]);
+            ->addColumn("balance", "float", ["default" => 0])
             ->addIndex(array('username', 'uuid'), array('unique' => true))
             ->save();
 
