@@ -108,6 +108,7 @@ class Index extends Rest {
             unset($r["description"]);
             $r["type"] = "permanent";
             $r["items"] = [];
+            $r["endTime"] = -1;
             foreach($p->perk->items as $i) {
                 $r["items"][] = $i->toArray();
             }
