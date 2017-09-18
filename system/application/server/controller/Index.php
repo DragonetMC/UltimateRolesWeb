@@ -55,6 +55,8 @@ class Index extends Rest {
         }
         if($player->username !== $username) {
             $ret["player"]["change"] = "USERNAME";
+            $player->username = trim($username);
+            $player->save();
         }
         $ret["player"]["id"] = $player->id;
 
