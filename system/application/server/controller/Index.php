@@ -77,10 +77,10 @@ class Index extends Rest {
 
         $perms = [];
         foreach($i_limited as $p) {
-            if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
-                continue;
-            }
             $valid = false;
+            if(PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
+                $valid = true;
+            }
             foreach($group_def as $g) {
                 if(PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $g->id])) {
                    $valid = true;
@@ -97,10 +97,10 @@ class Index extends Rest {
             $perms[] = $r;
         }
         foreach($i_permanent as $p) {
-            if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
-                continue;
-            }
             $valid = false;
+            if(PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
+                $valid = true;
+            }
             foreach($group_def as $g) {
                 if(PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $g->id])) {
                     $valid = true;
@@ -118,10 +118,10 @@ class Index extends Rest {
             $perms[] = $r;
         }
         foreach($i_default as $p) {
-            if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
-                continue;
-            }
             $valid = false;
+            if(PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
+                $valid = true;
+            }
             foreach($group_def as $g) {
                 if(PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $g->id])) {
                     $valid = true;
