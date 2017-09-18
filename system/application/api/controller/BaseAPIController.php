@@ -8,11 +8,12 @@ use think\controller\Rest;
 
 class BaseAPIController extends Rest {
 
-    public function _initialize(){
+    public function __construct(){
         if(!session("?user_id")) {
             json(["status" => "error", "message" => "not_logged_in"], 200)->send();
             exit();
         }
+        parent::__construct();
     }
 
     protected function user() {
