@@ -39,7 +39,7 @@ class Perks extends BaseAdminController {
             die("Failed to find the perk item with ID [" . $itemId . "]. ");
         }
         $this->assign("item", $item);
-        return $this->fetch();
+        return $this->fetch("dialogEditItem");
     }
 
     public function updatePerk($perkId = -1) {
@@ -70,12 +70,12 @@ class Perks extends BaseAdminController {
             return $this->fetch("common/error");
         }
         $this->assign("perk", $perk);
-        return $this->fetch();
+        return $this->fetch("editApplications");
     }
 
     public function dialogAddApplication() {
         $this->assign("definitions", isset($_GET["group"]) ? ServerDefinition::all(["group" => 1]) : ServerDefinition::all());
-        return $this->fetch();
+        return $this->fetch("dialogAddApplication");
     }
 
     public function defaults() {
@@ -83,6 +83,6 @@ class Perks extends BaseAdminController {
     }
 
     public function dialogAddDefaultPerk() {
-        return $this->fetch();
+        return $this->fetch("dialogAddDefaultPerk");
     }
 }

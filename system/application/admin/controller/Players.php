@@ -33,6 +33,6 @@ class Players extends BaseAdminController {
         }
         $this->assign("user", $user);
         $this->assign("server_time", date("Y-m-d H:i:s"));
-        return $this->fetch();
+        return $this->fetch("dialogAddRole");
     }
 }
