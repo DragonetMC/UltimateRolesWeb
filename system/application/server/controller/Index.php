@@ -37,7 +37,7 @@ class Index extends Rest {
         $username = trim($_GET["username"]);
         $uuid = trim($_GET["uuid"]);
         $server = trim($_GET["server"]);
-        $group = trim($_GET["group"]);
+        $groups = explode(",", trim($_GET["group"]));
 
         $ret = [
             "player" => [
@@ -59,7 +59,11 @@ class Index extends Rest {
         $ret["player"]["id"] = $player->id;
 
         $server_def = ServerDefinition::get(["value" => $server, "group" => 0]);
-        $group_def = ServerDefinition::get(["value" => $group, "group" => 1]);
+        $group_def = [];
+        foreach($groups as $g) {
+            $def = ServerDefinition::get(["value" => $g, "group" => 1]);
+            if($def) $group_def[] = $def;
+        }
         if(!$server_def or !$group_def) {
             return $this->json([], "error", "failed_to_find_server_or_group");
         }
@@ -70,10 +74,16 @@ class Index extends Rest {
 
         $perms = [];
         foreach($i_limited as $p) {
-            if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id]) and
-                !PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $group_def->id])) {
+            if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
                 continue;
             }
+            $valid = false;
+            foreach($group_def as $g) {
+                if(PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $g->id])) {
+                   $valid = true;
+                }
+            }
+            if(!$valid) continue;
             $r = $p->perk->toArray();
             unset($r["description"]);
             $r["type"] = "limited";
@@ -84,10 +94,16 @@ class Index extends Rest {
             $perms[$p->perk->name] = $r;
         }
         foreach($i_permanent as $p) {
-            if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id]) and
-                !PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $group_def->id])) {
+            if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
                 continue;
             }
+            $valid = false;
+            foreach($group_def as $g) {
+                if(PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $g->id])) {
+                    $valid = true;
+                }
+            }
+            if(!$valid) continue;
             $r = $p->perk->toArray();
             unset($r["description"]);
             $r["type"] = "permanent";
@@ -98,10 +114,16 @@ class Index extends Rest {
             $perms[$p->perk->name] = $r;
         }
         foreach($i_default as $p) {
-            if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id]) and
-                !PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $group_def->id])) {
+            if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
                 continue;
             }
+            $valid = false;
+            foreach($group_def as $g) {
+                if(PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $g->id])) {
+                    $valid = true;
+                }
+            }
+            if(!$valid) continue;
             $r = $p->perk->toArray();
             unset($r["description"]);
             $r["type"] = "default";
