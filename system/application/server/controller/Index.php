@@ -59,6 +59,9 @@ class Index extends Rest {
         $ret["player"]["id"] = $player->id;
 
         $server_def = ServerDefinition::get(["value" => $server, "group" => 0]);
+        if(!$server_def) {
+            return $this->json([], "error", "unknown_server_name");
+        }
         $group_def = [];
         foreach($groups as $g) {
             $def = ServerDefinition::get(["value" => $g, "group" => 1]);
