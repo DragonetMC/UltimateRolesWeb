@@ -94,7 +94,7 @@ class Index extends Rest {
             foreach($p->perk->items as $i) {
                 $r["items"][] = $i->toArray();
             }
-            $perms[$p->perk->name] = $r;
+            $perms[] = $r;
         }
         foreach($i_permanent as $p) {
             if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
@@ -115,7 +115,7 @@ class Index extends Rest {
             foreach($p->perk->items as $i) {
                 $r["items"][] = $i->toArray();
             }
-            $perms[$p->perk->name] = $r;
+            $perms[] = $r;
         }
         foreach($i_default as $p) {
             if(!PerkApplication::get(["perkId" => $p->perk->id, "definitionId" => $server_def->id])) {
@@ -136,7 +136,7 @@ class Index extends Rest {
             foreach($p->perk->items as $i) {
                 $r["items"][] = $i->toArray();
             }
-            $perms[$p->perk->name] = $r;
+            $perms[] = $r;
         }
         $ret["data"] = $perms;
         return $this->json($ret);
