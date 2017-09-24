@@ -11,15 +11,15 @@
     <thead>
       <tr>
         <td style="width: 10%; ">ID</td>
-        <td style="width: 30%; ">Name</td>
-        <td style="width: 20%; ">Applied To</td>
-        <td style="width: 40%; ">Actions</td>
+        <td style="width: 30%; ">{{$Think.lang.name}}</td>
+        <td style="width: 20%; ">{{$Think.lang.applied_to}}</td>
+        <td style="width: 40%; ">{{$Think.lang.actions}}</td>
       </tr>
     </thead>
   </table>
   <div style="color: #111; font-size: 1.4em; padding-right: 5%; ">
-  Page: <span id="paginator_current"></span> / <span id="paginator_max"></span></div>
-  <button id="page_previous" class="btn btn-default" disabled>Previous</button> <button id="page_next" class="btn btn-default" disabled>Next</button>
+  {{$Think.lang.pager_display_label}}: <span id="paginator_current"></span> / <span id="paginator_max"></span></div>
+  <button id="page_previous" class="btn btn-default" disabled>{{$Think.lang.pager_previous}}</button> <button id="page_next" class="btn btn-default" disabled>{{$Think.lang.pager_next}}</button>
 </div>
 {{/block}}
 {{block name="scripts"}}
@@ -68,8 +68,8 @@ function onDataRefreshed(result) {
     ((value.applications.length > 0 ? 
       value.applications.join(", ") : 
       "(none)") + 
-    " <hr /><a class='btn btn-info' href='{{$Request.root}}/{{$Request.module}}/perks/editApplications/perkId/" + value.id + "'>edit</a>"), 
-    "<a href='{{$Request.root}}/{{$Request.module}}/perks/edit/perkId/" + value.id + "' class='btn btn-primary'>Edit</a> <a href='#' onclick='deletePerk(" + value.id + ")' class='btn btn-danger'>Delete</a>"]);
+    " <hr /><a class='btn btn-info' href='{{$Request.root}}/{{$Request.module}}/perks/editApplications/perkId/" + value.id + "'>{{$Think.lang.edit}}</a>"), 
+    "<a href='{{$Request.root}}/{{$Request.module}}/perks/edit/perkId/" + value.id + "' class='btn btn-primary'>{{$Think.lang.edit}}</a> <a href='#' onclick='deletePerk(" + value.id + ")' class='btn btn-danger'>{{$Think.lang.delete}}</a>"]);
   });
   table.draw(false);
   maxPage = result.maxPage;
@@ -89,16 +89,14 @@ function onDataRefreshed(result) {
 }
 
 function deletePerk(perkId) {
-  var c = confirm("You will DELETE perk with ID [" + perkId + "] and \n" + 
-                  "ALL assosiated shop items and instances will be DELETED as well!! \n\n" + 
-                  "CONFIRM DELETING? ");
+  var c = confirm("{{$Think.lang.role_deletion_warning}}".format({role_id: perkId}));
   if(!c) return;
   $.getJSON("{{$Request.root}}/{{$Request.module}}/api/deletePerk/perkId/" + perkId, function(data){
     var r = data.deletion;
     if (r[0] == "success") {
       reload();
     } else {
-      alert("Deletion FAILED! \n Reason: " + r[1]);
+      alert("Deletion {{$Think.lang.failed}}! \n Reason: " + r[1]);
     }
   });
 }

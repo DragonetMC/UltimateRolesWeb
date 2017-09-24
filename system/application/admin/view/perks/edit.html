@@ -36,27 +36,25 @@
   </div>
   <div class="col-lg-6 col-sm-12 box-inner">
     <h3>Items</h3>
-    <p>Role items is a set of permissions, groups and prefixes. <br />
-    Type is a double char field, <code>PM</code> for permission, <code>GR</code> for group, <code>PF</code> for prefix and <code>SF</code> for suffix. <br />
-    <strong>Prefixes or Suffixes MUST use format: <code>priority:name</code> eg. <code>150:[Admin]</code></p>
+    {{$Think.lang.role_items_desc}}
     <form id="form_add_item" onsubmit="return false;" class="box-inner">
-      Type: 
+      {{$Think.lang.type}}: 
       <select name="itemType">
-        <option value="0">Permission Node</option>
-        <option value="1">Permission Group</option>
-        <option value="2">Player Prefix</option>
-        <option value="3">Player Suffix</option>
+        <option value="0">{{$Think.lang.role_item_types[0]}}</option>
+        <option value="1">{{$Think.lang.role_item_types[1]}}</option>
+        <option value="2">{{$Think.lang.role_item_types[2]}}</option>
+        <option value="3">{{$Think.lang.role_item_types[3]}}</option>
       </select>
-      Value: <input name="value" />
-      <input type="submit" onclick="newItem();" value="add" />
+      {{$Think.lang.value}}: <input name="value" />
+      <input type="submit" onclick="newItem();" value="{{$Think.lang.add}}" />
     </form>
-    <button id="btnReload" onclick="reload();" class="btn btn-info">reload</button>
+    <button id="btnReload" onclick="reload();" class="btn btn-info">{{$Think.lang.reload}}</button>
     <table id="items" style="width: 100%; text-align: center; ">
       <thead>
         <tr>
-          <td width="5%">Type</td>
-          <td width="50%">Value</td>
-          <td width="45%">Actions</td>
+          <td width="5%">{{$Think.lang.type}}</td>
+          <td width="50%">{{$Think.lang.value}}</td>
+          <td width="45%">{{$Think.lang.actions}}</td>
         </tr>
       </thead>
       <tbody>
@@ -64,7 +62,7 @@
         <tr>
           <td>{{$item.displayType}}</td>
           <td>{{$item.value}}</td>
-          <td><button onclick="editItem({{$item.id}});" class="btn btn-info">change</button><button onclick="deleteItem({{$item.id}})" class="btn btn-danger">del</button></td>
+          <td><button onclick="editItem({{$item.id}});" class="btn btn-info">{{$Think.lang.edit}}</button><button onclick="deleteItem({{$item.id}})" class="btn btn-danger">{{$Think.lang.delete}}</button></td>
         </tr>
 {{/volist}}
       </tbody>

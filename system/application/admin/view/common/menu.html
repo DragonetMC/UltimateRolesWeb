@@ -1,39 +1,39 @@
 <li class="sidebar-brand">
   <a href="{{$Request.root}}/admin">
-    <h1>Admin Panel</h1>
+    <h1>{{:lang('ur_cp')}}</h1>
   </a>
 </li>
 <hr />
-<li><a href="{{$Request.root}}/{{$Request.module}}">Admin Home</a></li>
+<li><a href="{{$Request.root}}/{{$Request.module}}">{{$Think.lang.ur_admin_home}}</a></li>
 <li>
-  <li style="color: #aaf;">Players</li>
+  <li style="color: #aaf;">{{$Think.lang.players}}</li>
   <ul>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/players">all players</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/players">{{$Think.lang.all}} {{$Think.lang.players}}</a></li>
   </ul>
 </li>
 <li>
-  <li style="color: #aaf;">Roles</li>
+  <li style="color: #aaf;">{{$Think.lang.roles}}</li>
   <ul>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/perks">all roles</a></li>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/perks/create">create role</a></li>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/perks/defaults">defaults roles</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/perks">{{$Think.lang.all}} {{$Think.lang.roles}}</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/perks/create">{{$Think.lang.create}} {{$Think.lang.roles}}</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/perks/defaults">{{$Think.lang.default}} {{$Think.lang.roles}}</a></li>
   </ul>
 </li>
 <li>
-  <li style="color: #aaf;">Servers</li>
+  <li style="color: #aaf;">{{$Think.lang.servers}}</li>
   <ul>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/servers">all servers/groups</a></li>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/servers/create">create server/group</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/servers">{{$Think.lang.all}} {{$Think.lang.servers_or_groups}}</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/servers/create">{{$Think.lang.create}} {{$Think.lang.servers_or_groups}}</a></li>
   </ul>
 </li>
 <li>
-  <li style="color: #aaf;">Shop</li>
+  <li style="color: #aaf;">{{$Think.lang.shop}}</li>
   <ul>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/shop">all items</a></li>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/shop/createItem">create shop item</a></li>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/shop/categories">manage categories</a></li>
-    <li><a href="{{$Request.root}}/{{$Request.module}}/shop/featured">manage featured items</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/shop">{{$Think.lang.all}} {{$Think.lang.shop_item}}</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/shop/createItem">{{$Think.lang.create}} {{$Think.lang.shop_item}}</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/shop/categories">{{$Think.lang.manage}} categories</a></li>
+    <li><a href="{{$Request.root}}/{{$Request.module}}/shop/featured">{{$Think.lang.manage}} {{$Think.lang.featured_items}}</a></li>
   </ul>
 </li>
 <hr />
-<li><a href="{{$Request.root}}/{{$Request.module}}/auth/logout">Logout</a></li>
+<li><a href="{{$Request.root}}/{{$Request.module}}/auth/logout">{{$Think.lang.logout}}</a></li>

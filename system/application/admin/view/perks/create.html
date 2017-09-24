@@ -17,15 +17,15 @@
 {{/block}}
 {{block name="body"}}
 <div class="col-lg-12 box">
-  <h2>Create Role</h2>
+  <h2>{{$Think.lang.create}} {{$Think.lang.role}}</h2>
   <div class="col-lg-6 col-sm-12 box-inner">
-    <h3>Details</h3>
-    <p>Basic information. </p>
+    <h3>{{$Think.lang.details}}</h3>
+    <p>{{$Think.lang.basic_info}}</p>
     <form action="{{$Request.root}}/{{$Request.module}}/{{$Request.controller}}/updatePerk" method="POST">
-      <strong>Name</strong>: <input class="form-control" name="name" value="" /><br />
-      <strong>Description</strong>: <br />
+      <strong>{{$Think.lang.name}}</strong>: <input class="form-control" name="name" value="" /><br />
+      <strong>{{$Think.lang.desc}}</strong>: <br />
       <textarea id="desc" name="description"></textarea><br />
-      <input type="submit" class="btn btn-primary" value="Update" />
+      <input type="submit" class="btn btn-primary" value="{{$Think.lang.create}}" />
     </form>
   </div>
 </div>

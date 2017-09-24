@@ -9,14 +9,14 @@
 </style>
 {{/block}}
 {{block name="body"}}
-<h1>UltimateRoles Admin Panel</h1>
-<h4>a complete solution for Minecraft roles and perks with a online shop. </h4>
+<h1>{{$Think.lang.ur}} {{$Think.lang.ur_cp}}</h1>
+<h4>{{$Think.lang.ur_slogan}}</h4>
 <div class="col-lg-12 box">
 <h2>Statistics</h2>
-Total players: <span id="info_players"></span><br />
-Perks: <span id="info_perks"></span><br />
-Shop Items: <span id="info_items"></span><br />
-Total perk purchases: <span id="info_purchases"></span><br />
+{{$Think.lang.ur_total_players}}: <span id="info_players"></span><br />
+{{$Think.lang.ur_perks}}: <span id="info_perks"></span><br />
+{{$Think.lang.ur_shop_items}}: <span id="info_items"></span><br />
+{{$Think.lang.ur_role_instances}}: <span id="info_purchases"></span><br />
 </div>
 {{/block}}
 {{block name="scripts"}}
