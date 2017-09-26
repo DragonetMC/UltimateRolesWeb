@@ -9,21 +9,9 @@ use app\common\model\PerkApplication;
 use app\common\model\PerkInstance;
 use app\common\model\ServerDefinition;
 use app\common\model\User;
-use think\controller\Rest;
 use think\Validate;
 
-class Index extends Rest {
-    public function __construct(){
-        if(!isset($_GET["key"]) or $_GET["key"] !== config("security.secret_plugin")) {
-            json(["status" => "error", "message" => "wrong_key"], 200)->send();
-            exit();
-        }
-        parent::__construct();
-    }
-
-    protected function json($data = [], $status = "success", $message = "") {
-        return json(array_merge(["status" => $status, "message" => $message], $data), 200);
-    }
+class Index extends ServerApi {
 
     public function index() {
         if(!Validate::make([

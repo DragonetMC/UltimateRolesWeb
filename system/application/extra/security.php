@@ -11,5 +11,5 @@ return [
      * notice: this is NOT admin login password,
      *     to change admin password, edit /application/extra/admin.php
      */
-    "secret_admin" => "CHANGE ME",
+    "secret_admin" => "CHANGE_ME",
 ];

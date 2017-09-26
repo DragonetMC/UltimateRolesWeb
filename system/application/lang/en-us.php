@@ -33,4 +33,12 @@ return [
     "actions" => "Actions",
     "type" => "Type",
     "value" => "Value",
+
+    // server api
+    "server_invalid_username" => "Invalid username! (Only accept letters, numbers, underscores)",
+    "server_reg_error_fields" => "Registration failed, username can only be alphabet/numbers/underscores",
+    "server_reg_error_server" => "Registration failed, server error! ",
+    "server_reg_error_user_exists" => "Registration failed, user already exists! ",
+    "server_login_error_user_not_found" => "Login failed, user not registered! ",
+    "server_login_error_password" => "Wrong password! ",
 ];

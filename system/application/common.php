@@ -9,14 +9,14 @@
 // | Author: 流年 <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-// 应用公共文件
+session_start();
 if(!isset($_GET["lang"])) {
-    if(!isset($_COOKIE["ur_admin_lang"])) {
+    if(!isset($_SESSION["ur_admin_lang"])) {
         $_GET["lang"] = "en-us";
-        $_COOKIE["ur_admin_lang"] = "en-us";
+        $_SESSION["ur_admin_lang"] = "en-us";
     } else {
-        $_GET["lang"] = $_COOKIE["ur_admin_lang"];
+        $_GET["lang"] = $_SESSION["ur_admin_lang"];
     }
 } else {
-    $_COOKIE["ur_admin_lang"] = $_GET["lang"];
+    $_SESSION["ur_admin_lang"] = $_GET["lang"];
 }
