@@ -6,16 +6,6 @@ return [
     "ur_cp" => "控制面板",
 
     "logout" => "管理员登出",
-    "players" => "玩家",
-    "role" => "角色",
-    "roles" => "角色",
-    "server" => "服务器",
-    "servers" => "服务器",
-    "servers_or_groups" => "服务器/组",
-    "shop" => "商店",
-    "shop_item" => "商店物品",
-    "shop_items" => "商店物品",
-    "featured_items" => "精品",
 
     // role creation
     "basic_info" => "基础信息",

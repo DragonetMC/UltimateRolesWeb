@@ -6,16 +6,6 @@ return [
     "ur_cp" => "Control Panel",
 
     "logout" => "Logout Admin",
-    "players" => "players",
-    "role" => "Role",
-    "roles" => "Roles",
-    "server" => "server",
-    "servers" => "servers",
-    "servers_or_groups" => "servers/groups",
-    "shop" => "shop",
-    "shop_item" => "shop item",
-    "shop_items" => "shop items",
-    "featured_items" => "featured items",
 
     // role creation
     "basic_info" => "Basic information. ",

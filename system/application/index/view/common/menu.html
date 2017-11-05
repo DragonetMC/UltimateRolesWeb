@@ -7,7 +7,7 @@
 {{empty name="Think.session.user_id"}}
 Not logged in, <a href="{{$Request.root}}/my/auth/login">login now</a>! 
 {{else /}}
-Welcome, {{$Think.session.user_name}}! <a href="{{$Request.root}}/my/auth/logout" style="color: #ddd; ">Logout</a><br />
+{{:lang("welcome_player", ["username" => session("user_name")])}}<a href="{{$Request.root}}/my/auth/logout" style="color: #ddd; ">Logout</a><br />
 &gt;&gt; Home 
 {{/empty}}
 </div>

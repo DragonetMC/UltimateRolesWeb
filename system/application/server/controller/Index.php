@@ -81,6 +81,7 @@ class Index extends ServerApi {
             unset($r["description"]);
             $r["type"] = "limited";
             $r["items"] = [];
+            $r["endTime"] = $p->endTime;
             foreach($p->perk->items as $i) {
                 $r["items"][] = $i->toArray();
             }
