@@ -97,7 +97,7 @@ class Shop extends ServerApi {
         }
         $status = $data[0];
         $endTime = $data[1]->endTime;
-        return $this->json(["endTime" => $endTime], ($status === "new" or $status === "renew") ? "success" : "error", $status);
+        return $this->json(["endTime" => $endTime], "success", $status);
     }
 
 }
