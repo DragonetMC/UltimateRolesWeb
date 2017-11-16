@@ -10,7 +10,7 @@ use think\Validate;
 
 class Card extends ServerApi {
 
-    public function card() {
+    public function redeem() {
         if(!Validate::make([
             "uuid" => "require|alphaDash",
             "serial" => "require|alphaNum",
