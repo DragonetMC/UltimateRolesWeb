@@ -1,7 +1,8 @@
 <?php
 return [
     /*
-     * secret for Bukkit/Spigot plugins to communicate with the API
+     * secret for Bukkit/Spigot plugins to communicate with the API,
+     * also can be used as ServerAPI
      */
     "secret_plugin" => "CHANGE_ME",
 

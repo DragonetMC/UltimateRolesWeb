@@ -62,10 +62,14 @@ return [
     "value" => "值",
 
     // server api
+    "invalid_data" => "invalid data! ",
     "server_invalid_username" => "用户名不合法! (字母、数字、下划线)",
     "server_reg_error_fields" => "用户名不合法! (字母、数字、下划线)",
     "server_reg_error_server" => "注册失败, 服务器错误!  ",
     "server_reg_error_user_exists" => "注册失败, 玩家已存在! ",
     "server_login_error_user_not_found" => "登陆失败, 这个账号还没有注册! ",
     "server_login_error_password" => "密码错误! ",
+
+    "card_invalid_info" => "无效卡密! ",
+    "card_used" => "卡密已经使用过了",
 ];

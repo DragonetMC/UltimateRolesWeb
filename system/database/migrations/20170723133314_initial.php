@@ -43,6 +43,7 @@ class Initial extends Migrator
         $this->table("balance_history")
             ->addColumn("userId", "integer")->addForeignKey("userId", "users", "id", ["delete" => "CASCADE"])
             ->addColumn("diffValue", "float")
+            ->addColumn("updateTime", "integer", ["limit" => \Phinx\Db\Adapter\MysqlAdapter::INT_BIG])
             ->addColumn("reason", "string")
             ->save();
 
