@@ -10,7 +10,11 @@ return [
     "password" => "Password",
     "balance" => "Balance",
     "my_info" => "My Information",
+    "create_account" => "Create Account",
+    "create_account_full" => "You have to join the server and type <code>/shop</code> to get your link. ",
 
+    "welcome" => "Welcome",
+    "welcome_player" => "Welcome, {username}! ",
     "home" => "Home",
     "my" => "My",
     "shop" => "Shop",

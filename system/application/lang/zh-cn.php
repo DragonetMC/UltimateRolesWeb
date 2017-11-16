@@ -10,7 +10,10 @@ return [
     "password" => "密码",
     "balance" => "余额",
     "my_info" => "我的信息",
+    "create_account" => "获取账号",
+    "create_account_full" => "服务器中输入 <code>/shop</code> 获取你的注册链接. ",
 
+    "welcome" => "欢迎",
     "welcome_player" => "欢迎, {username}! ",
     "home" => "主页",
     "my" => "个人中心",
@@ -21,9 +24,9 @@ return [
     "manage" => "管理",
     "default" => "默认",
     "desc" => "描述",
-    "contents" => "Contents",
-    "price" => "Price",
-    "stats" => "Statistics",
+    "contents" => "内容",
+    "price" => "价格",
+    "stats" => "统计信息",
 
     "failed" => "失败",
     "success" => "成功",

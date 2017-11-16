@@ -1,26 +1,25 @@
 <li class="sidebar-brand">
   <a href="{{$Request.root}}">
-    <h1>Welcome</h1>
+    <h1>{{$Think.lang.welcome}}</h1>
   </a>
 </li>
 <div style="color: #fff; padding-left: 16px; ">
 {{empty name="Think.session.user_id"}}
-Not logged in, <a href="{{$Request.root}}/my/auth/login">login now</a>! 
+{{$Think.lang.not_logged_in}}, <a href="{{$Request.root}}/my/auth/login">{{$Think.lang.login_now}}</a>! 
 {{else /}}
 {{:lang("welcome_player", ["username" => session("user_name")])}}<a href="{{$Request.root}}/my/auth/logout" style="color: #ddd; ">Logout</a><br />
-&gt;&gt; Home 
 {{/empty}}
 </div>
 <hr />
-<li><a href="{{$Request.root}}">Home</a></li>
+<li><a href="{{$Request.root}}">{{$Think.lang.home}}</a></li>
 {{empty name="Think.session.user_id"}}
-<li><a href="{{$Request.root}}/my/auth/login">My</a></li>
+<li><a href="{{$Request.root}}/my/auth/login">{{$Think.lang.my}}</a></li>
 {{else /}}
-<li><a href="{{$Request.root}}/my">My</a></li>
+<li><a href="{{$Request.root}}/my">{{$Think.lang.my}}</a></li>
 {{/empty}}
 <hr />
 <li>
-  <a href="{{$Request.root}}/shop">Shop</a>
+  <a href="{{$Request.root}}/shop">{{$Think.lang.shop}}</a>
   <ul id="categories">
 {{volist name="item_categories" id="c"}}
 <li><a href="{{$Request.root}}/shop/Index/index/id/{{$c.id}}">{{$c.name}}</a></li>
