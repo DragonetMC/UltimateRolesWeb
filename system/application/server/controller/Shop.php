@@ -83,21 +83,21 @@ class Shop extends ServerApi {
     }
 
     public function purchase() {
-        if(!Validate::make([
+        if (!Validate::make([
             "uuid" => "require|alphaDash",
             "itemId" => "require|number",
-        ])->check($_GET)) {
+        ])->check($_GET)
+        ) {
             return $this->json([], "error", lang("invalid_data"));
         }
         $uuid = $_GET["uuid"];
         $itemId = intval($_GET["itemId"]);
         $data = PerkTool::purchasePerk($uuid, $itemId);
-        if(!is_array($data)) {
+        if (!is_array($data) and !is_string($data)) {
             return $this->json([], "error", $data);
         }
-        $status = $data[0];
-        $endTime = $data[1]->endTime;
-        return $this->json(["endTime" => $endTime], "success", $status);
+
+        return $this->json(is_array($data) ? ["endTime" => $data[1]->endTime] : [], "success", is_array($data) ? $data[0] : $data);
     }
 
 }
